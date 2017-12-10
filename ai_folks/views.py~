@@ -1,0 +1,5 @@
+from django.shortcuts import render
+
+def index(request):
+    context = {'scholars': Scholar.objects.filter(classification = 'artificial intellgience').order_by("rank")}
+    return render(request, "ai_index.html", context)

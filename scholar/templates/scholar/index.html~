@@ -1,0 +1,282 @@
+{% extends "scholar/base.html" %}
+{% load staticfiles %}
+{% block content %}
+            <div class=' row'>
+                <div class='col-xs-12 card'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{ scholar.name }}</div>
+                        <div class="panel-body" style='height: 300px;overflow:auto;padding: 0 15px;margin: 10px 0;'>
+                            <ul class="media-list">
+                                <li class="media">
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object" src={{ scholar.photourl }} alt="头像">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <a href="#">{{ scholar.name }}</a>
+                                        </h4>
+                                        <ul class="introduction user-info">
+                                            <li style='background-image: url("{% static "img/name.jpg" %}")'>{{ scholar.position }}</li>
+                                            <li style='background-image: url("{% static "img/addr.png" %}")'>{{ scholar.affiliation }}</li>
+                                            <li style='background-image: url("{% static "img/phone.jpg" %}")'></li>
+                                            <li style='background-image: url("{% static "img/email.jpg" %}")'>{{ scholar.email }}</li>
+                                            <li style='background-image: url("{% static "img/url.jpg" %}")'>{{ scholar.homepage }}</li>
+                                            <li style='background-image: url("{% static "img/education.jpg" %}")'>
+                                             {{ scholar.graduateschool }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+		<!--
+                <div class='col-xs-4 card'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">学术指标</div>
+                        <div class="panel-body" style='height: 300px;overflow:auto;padding: 0 15px;margin: 10px 0;'>
+                            Coming soon
+                        </div>
+                    </div>
+                </div>
+		-->
+                <div class='col-xs-6 card'>
+
+                    <div class='col-xs-12 card' style="padding: 0 0px 10px;">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                个人标签
+                                <!-- <span class='save'>添加</span> -->
+                            </div>
+                            <div class="panel-body user-tag" style='height: 90px;overflow:auto;padding: 10px 15px 0;margin: 10px 0;'>
+			        {% for item in scholar.tag_set.all %}
+                                    <span class='col-xs-3 col'><span class='tag'>
+					<a href="{%url 'scholar:tag_search' item %}">{{ item }}</a>
+				    </span></span>
+				{% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class='col-xs-12 card' style="padding: 0 0px 10px;">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                研究兴趣
+                                <!-- <span class='save'>添加</span> -->
+                            </div>
+			    <div class="panel-body user-tag" style='height: 200px;overflow:auto;padding: 10px 15px 0;margin: 10px 0;'>
+                                    <div id="main" style="width: 100%;height:100%;"></div>                                    
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class='col-xs-6 card'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            学术指标
+                            <!-- <span class='save'>添加</span> -->
+                        </div>
+			<div class="panel-body user-tag" style='height: 360px;overflow:auto;padding: 0 15px 0;margin: 10px 0;'>
+                                <div id="main2" style="width: 100%;height:100%;"></div>                                    
+                        </div>
+
+                    </div>
+                </div>
+                <!--                
+                <div class='col-xs-12 card'>
+                    <div class='myTab'>
+                        <ul id="myTab" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#paper" data-toggle="tab">
+                                        paper
+                                </a>
+                            </li>
+                            <li><a href="#report" data-toggle="tab">report</a></li>
+                            <li><a href="#patent" data-toggle="tab">patent</a></li>
+                        </ul>
+                    
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="paper">
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width='10%'>
+                                                <span style='font-size: 24px;'>918</span>
+                                            </td>
+                                            <td width='40%'>
+                                                Mining Reliable Information from Passively and Actively Crowdsourced Data.
+                                            </td>
+                                            <td width='40%'>
+                                                <p style='color: #9fb0ff'>
+                                                    Jing Gao, Qi Li, <span style='color:#5574ff'>Bo Zhao</span>, Wei Fan, <span style='color: #ff6367'>Jiawei Han</span>
+                                                </p>
+                                            </td>
+                                            <td width='10%'>
+                                                <p style='color: #888991'>KDD(2016)</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="report">
+                                <p>内容</p>
+                            </div>
+                            <div class="tab-pane fade" id="patent">
+                                <p>内容</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+		-->
+            </div>
+        </div>
+        <script>
+        function initEchar(array, key) {
+            var myChart = echarts.init(document.getElementById('main'));
+
+            option = {
+
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'line',
+                        lineStyle: {
+                            color: 'rgba(0,0,0,0.2)',
+                            width: 1,
+                            type: 'solid'
+                        }
+                    }
+                },
+                legend: {
+                    data: key,
+                },
+                
+                singleAxis: {
+                    top: 50,
+                    bottom: 50,
+                    axisTick: {},
+                    axisLabel: {},
+                    min: 'dataMin',
+                    max: 'dataMax',
+                    axisPointer: {
+                        animation: true,
+                        label: {
+                            show: true
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            opacity: 0.2
+                      }
+                    }
+                },
+
+                series: [
+                    {
+                        type: 'themeRiver',
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 20,
+                                shadowColor: 'rgba(0, 0, 0, 0.8)'
+                            }
+                        },
+                        data: array,
+                    }
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+
+        function initEchar2(data) {
+            var myChart = echarts.init(document.getElementById('main2'));
+
+            option = {
+                tooltip: {},
+                //legend: {
+                    //data: ['normalize'],
+                //},
+                grid: {
+                    top: '20',
+                    containLabel: true,
+                },
+                radar: {
+                    // shape: 'circle',
+                    name: {
+                        textStyle: {
+                            color: '#fff',
+                            backgroundColor: '#999',
+                            borderRadius: 3,
+                            padding: [3, 5]
+                       }
+                  },
+                    indicator: (function () {
+                        let indicator = [];
+                        data.axis.forEach(function(r, i){
+                            indicator.push({
+                                name: r,
+                                max: 1,
+                            });
+                        });
+                        return indicator;
+                    })(),
+                },
+                series: [{
+                    name: '',
+                    type: 'radar',
+                    areaStyle: {normal: { color: 'green'}},
+                    data : [
+                        {
+                            value : data.normalize[0],
+                            name : 'normalize'
+                        }
+                    ]
+              }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+
+
+
+        $.ajax({
+            url:"https://api.aminer.org/api/person/indices/{{ scholar.guid }}",
+            success:function(result){
+                initEchar2(result)
+            }
+        });
+
+	$.ajax({
+                url:"{% url 'scholar:scholar_json' scholar.id %}",
+                success:function(result){
+	            let array = [];
+	            let key = [];
+	            for (let obj of result.interests) {
+	  for (let v of obj.values) {
+	  let value = [v[0], v[1], obj.key];
+	  array.push(value);
+          console.log(value)
+	  }
+	                key.push(obj.key)
+}
+
+                    initEchar(array, key);
+                }
+        });
+
+	</script>
+{% endblock %}

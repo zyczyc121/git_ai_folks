@@ -1,0 +1,88 @@
+{% extends "scholar/base.html" %}
+{% block content %}
+    <div class=' row'>
+        <div class='col-xs-12 card'>
+            <div class='myTab'>
+                <div class='rgzn'>
+                <span>人工智能</span>
+		     <!--
+                     <div class='form'>
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label for="orderKey" style='padding-right: 10px'>排序</label>
+                                        <select name="orderKey">
+                                            <option>影响力</option>
+                                            <option>姓名</option>
+                                            <option>领域</option>
+                                            <option>标签</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style='padding-right: 10px'>
+                                            <input type="radio" name="order" id="asc" value="asc" checked>
+                                            升序
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="order" id="desc" value="desc">
+                                            降序
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    -->
+                        <div class='myTable'>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width='30%'>人才</th>
+                                        <th width='30%'>领域</th>
+                                        <th width='40%'>标签</th>
+                                    </tr>
+                                </thead>
+                                {% for person in scholars %}
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <ul class="media-list">
+                                                <li class="media">
+                                                    <div class="media-left">
+                                                        <a href="#">
+                                                            <div class="media-object" style='background-image: url({{person.photourl}})'></div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading">
+                                                            <a href="{% url 'scholar:profile' person.id %}">{{ person.name }}</a>
+                                                        </h4>
+                                                        <ul class="introduction">
+                                                            <li>{{ person.affiliation }}</li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <div style='padding-left: 20px;'>
+                                                <ul style='list-style: disc'>
+                                                    <li>{{ person.classification }}</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td>
+					    {% for item in person.tag_set.all %}       
+					         {% if item.user_id == request.user.id or item.user == None %}
+                                                    <span class='tag' style='margin-bottom: 20px'><a href="{% url 'scholar:tag_search' item %}">{{ item }}</a></span>
+						 {% endif %}
+				            {% endfor%}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% endfor%}
+                            </table>
+                        </div>
+               </div>
+           </div>
+	</div>
+     </div> 
+{% endblock %}
