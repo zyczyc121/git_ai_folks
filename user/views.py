@@ -4,7 +4,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -26,12 +26,13 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 django_login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+                return JsonResponse({'err': 'success'})
+                #return HttpResponseRedirect(reverse('index'))
             else:
-                form.add_error(None, "Invalid username or password")
-                return HttpResponse(form.errors.as_json())
+                form.add_error('username', "Invalid username or password")
+                return JsonResponse(form.errors.as_json(), safe=False)
         else:
-            return HttpResponse(form.errors.as_json())
+            return JsonResponse(form.errors.as_json(), safe=False)
     
     else:
         form = LoginForm()
@@ -40,8 +41,8 @@ def login(request):
 
 def logout(request):
     django_logout(request)
-    return render(request, "ai_index.html", {'user': request.user })
-
+    #return render(request, "ai_index.html", {'user': request.user })
+    return HttpResponseRedirect(reverse('index'))
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -60,9 +61,10 @@ def signup(request):
             #})
             #user.email_user(subject, message)
             #return redirect('user/account_activation_sent')
-            return render(request, 'ai_index.html')
+            django_login(request, user)
+            return JsonResponse({'err': 'success'})
         else:
-            return HttpResponse(form.errors.as_json())
+            return JsonResponse(form.errors.as_json(), safe=False)
     else:
         form = SignUpForm()
     return render(request, "user/signup.html", {'form': form})

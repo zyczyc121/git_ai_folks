@@ -245,6 +245,7 @@
                                         <span class="fa fa-user-circle-o" style='width: 20px;'></span>
                                     </div>
                                     <input type="text" name="username" class="form-control" id="login_username" placeholder="请输入账号">
+				    <div id="login_username_err" style='color: red'></div>
                                 </div>
                             </div>
                         </div>
@@ -255,6 +256,7 @@
                                         <span class="fa fa-unlock-alt" style='width: 20px;'></span>
                                     </div>
                                     <input type="password" name="password" class="form-control" id="login_password" placeholder="请输入密码">
+				    <div id="login_password_err" style='color: red'></div>
                                 </div>
                             </div>
                         </div>
@@ -322,19 +324,21 @@
                             <label for="username" class="col-sm-4 control-label">用户名</label>
                             <div class="col-sm-6">
                                 <input type="text" name="username" class="form-control" id="username" placeholder="用户名只能有字母、数字和下划线">
+			    	<div id="username_err" style='color: red'></div>
                             </div>
-			    <span id="username_err" style='color: red'></span>
                         </div>
                         <div class="form-group">
                             <label for="email" class="col-sm-4 control-label">注册邮箱</label>
                             <div class="col-sm-6">
                                 <input type="email" name="email" class="form-control" id="email" placeholder="请输入您的邮箱">
+				<div id="email_err" style='color: red'></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="name" class="col-sm-4 control-label">姓名</label>
                             <div class="col-sm-6">
                                 <input type="text" name="first_name" class="form-control" id="name" placeholder="请输入您的姓名">
+				<div id="name_err" style='color: red'></div>
                             </div>
                         </div>
 			<!--
@@ -370,12 +374,14 @@
                             <label for="password1" class="col-sm-4 control-label">密码</label>
                             <div class="col-sm-6">
                                 <input type="password" name="password1" class="form-control" id="password1" placeholder="密码至少有8位并且要是大写字母、小写字母、数字、特殊字符 满足其中三种即可">
+				<div id="password1_err" style='color: red'></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="password2" class="col-sm-4 control-label">确认密码</label>
                             <div class="col-sm-6">
                                 <input type="password" name="password2" class="form-control" id="password2" placeholder="重复输入密码">
+				<div id="password2_err" style='color: red'></div>
                             </div>
                         </div>
                         <div class="form-group" style='margin-top: 30px'>
@@ -400,6 +406,72 @@
             // $('.panel-heading.collapsed').find('.panel-title>span.right').removeClass('fa-caret-up');
             // $('.panel-heading.collapsed').find('.panel-title>span.right').removeClass('fa-caret-down');
             // $('.panel-heading.collapsed').find('.panel-title>span.right').addClass('fa-caret-down');
+        });
+
+        $("#form").submit(function(e){
+            //用户名
+	    event.preventDefault();
+            var username = $('#username').val();
+
+            if (!checkPassword()) {
+                return false;
+            }
+
+            $.ajax({
+		type: "POST",
+                url:"{% url 'user:signup' %}",
+		'data': {
+	            'csrfmiddlewaretoken': '{{ csrf_token }}',
+		    'username': $('#username').val(),
+		    'email': $('#email').val(),
+		    'first_name': $('#name').val(),
+		    'password1': $('#password1').val(),
+		    'password2': $('#password2').val(),
+        	},
+                success:function(result){
+		    if (result.err == 'success') {
+		        location.reload();
+			return false;
+ 		    }
+		    result = JSON.parse(result)
+                    $('#username_err').text(result.username[0].message);
+                    $('#email_err').text(result.email[0].message);
+                    $('#name_err').text(result.username[0].message);
+                    $('#password1_err').text(result.password1[0].message);
+                    $('#password2_err').text(result.password2[0].message);
+		    
+                }
+            });
+            
+            return false;
+        });
+
+
+	$("#formLogin").submit(function(e){
+            
+	    event.preventDefault();
+
+            $.ajax({
+		type: "POST",
+                url:"{% url 'user:login' %}",
+		'data': {
+	            'csrfmiddlewaretoken': '{{ csrf_token }}',
+		    'username': $('#login_username').val(),
+		    'password': $('#login_password').val(),
+       		},
+                success:function(result){
+		    if (result.err == 'success') {
+		        location.reload();
+			return false;
+ 		    }
+		    result = JSON.parse(result)
+		    console.log(result)
+                    //$('#login_username_err').text(result);
+                    $('#login_password_err').text(result.username[0].message);		    
+                }
+            });
+            
+            return false;
         });
 
         $("#go_to_register").click(function(e){
@@ -446,8 +518,8 @@
 
         // 密码校验
         function checkPassword() {
-            var passwordValue = $.trim($('#password').val());
-            var rePasswordValue = $.trim($('#repassword').val());
+            var passwordValue = $.trim($('#password1').val());
+            var rePasswordValue = $.trim($('#password2').val());
             if ("" == passwordValue) {
                 alert("请输入密码");
                 return false;

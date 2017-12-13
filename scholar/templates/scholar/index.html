@@ -10,7 +10,8 @@
                                 <li class="media">
                                     <div class="media-left">
                                         <a href="#">
-                                            <img class="media-object" src={{ scholar.photourl }} alt="头像">
+                                            <!-- <img class="media-object" src={{ scholar.photourl }} alt="头像"> -->
+					    <div style='background-image: url({{ scholar.photourl }})'></div>
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -270,11 +271,11 @@
 	  for (let v of obj.values) {
 	  let value = [v[0], v[1], obj.key];
 	  array.push(value);
-          console.log(value)
 	  }
 	                key.push(obj.key)
 }
-
+console.log(JSON.stringify(array))
+console.log(JSON.stringify(key))
                     initEchar(array, key);
                 }
         });
