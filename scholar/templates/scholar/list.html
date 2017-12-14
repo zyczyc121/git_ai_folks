@@ -5,32 +5,31 @@
             <div class='myTab'>
                 <div class='rgzn'>
                 <span>{{ listing }}</span>
-                     <!--		     
-                     <div class='form'>
-                                <form class="form-inline">
+
+                        <div class='form' >
+                                <form class="form-inline" action="{% url 'scholar:sort' data_set %}">
                                     <div class="form-group">
                                         <label for="orderKey" style='padding-right: 10px'>排序</label>
-                                        <select name="orderKey">
-                                            <option>影响力</option>
-                                            <option>姓名</option>
-                                            <option>领域</option>
-                                            <option>标签</option>
+                                        <select name="orderKey" onchange="this.form.submit();">
+                                            <option value="rank" {% if rank %}{{ 'selected="selected"' }}{% endif %}>排名</option>
+                                            <option value="name" {% if name %}{{ 'selected="selected"' }}{% endif %}>姓名</option>
+                                            <option value="classification" {% if classification %}{{ 'selected="selected"' }}{% endif %}>领域</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label style='padding-right: 10px'>
-                                            <input type="radio" name="order" id="asc" value="asc" checked>
+                                            <input type="radio" name="order" id="asc" value="asc" {% if asc %}{{ 'checked' }}{% endif %} onclick="this.form.submit()">
                                             升序
                                         </label>
                                         <label>
-                                            <input type="radio" name="order" id="desc" value="desc">
+                                            <input type="radio" name="order" id="desc" value="desc" {% if desc %}{{ 'checked' }}{% endif %} onclick="this.form.submit()">
                                             降序
                                         </label>
                                     </div>
                                 </form>
                             </div>
                         </div>  
-		        -->
+
                         <div class='myTable'>
                             <table class="table table-hover">
                                 <thead>

@@ -69,7 +69,7 @@
                                 <!-- <span class='save'>添加</span> -->
                             </div>
 			    <div class="panel-body user-tag" style='height: 200px;overflow:auto;padding: 10px 15px 0;margin: 10px 0;'>
-                                    <div id="main" style="width: 100%;height:100%;"></div>                                    
+                                    <svg id="main" style="width: 100%;height:100%;"></svg>                                    
                             </div>
 
                         </div>
@@ -138,68 +138,30 @@
             </div>
         </div>
         <script>
-        function initEchar(array, key) {
-            var myChart = echarts.init(document.getElementById('main'));
+        function initEchar(result) {
+            var svg = d3.select("svg")
+        var width = 520
+        var height = 200
+        var data = result
+	console.log(data)
+        var chart;
+        nv.addGraph(function () {
+            chart = nv.models.stackedAreaChart()
+                .useInteractiveGuideline(true)
+                .x(function (d) { return d[0] })
+                .y(function (d) { return d[1] })
+                .showYAxis(false)
+                .style('stream-center')
+                .interpolate('basis')
 
-            option = {
-
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'line',
-                        lineStyle: {
-                            color: 'rgba(0,0,0,0.2)',
-                            width: 1,
-                            type: 'solid'
-                        }
-                    }
-                },
-                legend: {
-                    data: key,
-                },
-                
-                singleAxis: {
-                    top: 50,
-                    bottom: 50,
-                    axisTick: {},
-                    axisLabel: {},
-                    min: 'dataMin',
-                    max: 'dataMax',
-                    axisPointer: {
-                        animation: true,
-                        label: {
-                            show: true
-                        }
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            type: 'dashed',
-                            opacity: 0.2
-                      }
-                    }
-                },
-
-                series: [
-                    {
-                        type: 'themeRiver',
-                        label: {
-                            normal: {
-                                show: false
-                            }
-                        },
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 20,
-                                shadowColor: 'rgba(0, 0, 0, 0.8)'
-                            }
-                        },
-                        data: array,
-                    }
-                ]
-            };
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
+            chart.xAxis.tickFormat(d3.format('.0f'));
+            d3.select('#main')
+                .datum(data.interests.slice(0, 5))
+                .transition()
+                .call(chart)
+            nv.utils.windowResize(chart.update);
+            return chart;
+            });
         }
 
         function initEchar2(data) {
@@ -265,18 +227,7 @@
                 //url:"{% url 'scholar:scholar_json' scholar.id %}",
 	        url:"https://api.aminer.org/api/person/interests/{{ scholar.guid }}",
                 success:function(result){
-	            let array = [];
-	            let key = [];
-	            for (let obj of result.interests) {
-	  for (let v of obj.values) {
-	  let value = [v[0], v[1], obj.key];
-	  array.push(value);
-	  }
-	                key.push(obj.key)
-}
-console.log(JSON.stringify(array))
-console.log(JSON.stringify(key))
-                    initEchar(array, key);
+                    initEchar(result);
                 }
         });
 
