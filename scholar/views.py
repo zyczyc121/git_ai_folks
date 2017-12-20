@@ -64,6 +64,10 @@ def sort(request, var):
     elif function == 'search':
         return search(request, content, str(request.GET.get('orderKey')), str(request.GET.get('order')))
 
-def scholar_json(request, scholar_pk):
+def scholar_focus_json(request, scholar_pk):
     data = Scholar.objects.get(id = scholar_pk).focus
+    return JsonResponse(data)
+
+def scholar_statistics_json(request, scholar_pk):
+    data = Scholar.objects.get(id = scholar_pk).statistics
     return JsonResponse(data)

@@ -32,7 +32,7 @@ class Scholar(models.Model):
     position = models.CharField(max_length = 100, null = True)
     rank = models.IntegerField(null = True)
     focus = JSONField(null = True, default=None)
-
+    statistics = JSONField(null = True, default=None)
 class Tag(models.Model):
     title = models.CharField(max_length = 60)
     members = models.ManyToManyField(Scholar, through = 'Label')

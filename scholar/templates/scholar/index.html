@@ -217,15 +217,16 @@
 
 
         $.ajax({
-            url:"https://api.aminer.org/api/person/indices/{{ scholar.guid }}",
+	    url:"{% url 'scholar:scholar_statistics_json' scholar.id %}",
+            //url:"https://api.aminer.org/api/person/indices/{{ scholar.guid }}",
             success:function(result){
                 initEchar2(result)
             }
         });
 
 	$.ajax({
-                //url:"{% url 'scholar:scholar_json' scholar.id %}",
-	        url:"https://api.aminer.org/api/person/interests/{{ scholar.guid }}",
+                url:"{% url 'scholar:scholar_focus_json' scholar.id %}",
+	        //url:"https://api.aminer.org/api/person/interests/{{ scholar.guid }}",
                 success:function(result){
                     initEchar(result);
                 }

@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^profile/(?P<scholar_pk>\d+)$', scholar.views.profile, name='profile'),
     url(r'^search/$', scholar.views.search, name='search'),
     url(r'^sort/(?P<var>.+)$', scholar.views.sort, name='sort'),
-    url(r'^scholar_json/(?P<scholar_pk>\d+)$', scholar.views.scholar_json, name='scholar_json')
+    url(r'^scholar_focus_json/(?P<scholar_pk>\d+)$', scholar.views.scholar_focus_json, name='scholar_focus_json'),
+    url(r'^scholar_statistics_json/(?P<scholar_pk>\d+)$', scholar.views.scholar_statistics_json, name='scholar_statistics_json')
 ]
