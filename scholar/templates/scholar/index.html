@@ -89,7 +89,7 @@
 
                     </div>
                 </div>
-                <!--                
+                
                 <div class='col-xs-12 card'>
                     <div class='myTab'>
                         <ul id="myTab" class="nav nav-tabs">
@@ -101,27 +101,34 @@
                             <li><a href="#report" data-toggle="tab">report</a></li>
                             <li><a href="#patent" data-toggle="tab">patent</a></li>
                         </ul>
-                    
+                    	
                         <div id="myTabContent" class="tab-content">
                             <div class="tab-pane fade in active" id="paper">
                                 <table class="table table-striped">
                                     <tbody>
+					{% for item in scholar.paper_set.all%}
                                         <tr>
                                             <td width='10%'>
-                                                <span style='font-size: 24px;'>918</span>
+                                                <span style='font-size: 24px;'>{{ forloop.revcounter }}</span>
                                             </td>
                                             <td width='40%'>
-                                                Mining Reliable Information from Passively and Actively Crowdsourced Data.
+                                                {{ item.info_json.title }}
                                             </td>
                                             <td width='40%'>
                                                 <p style='color: #9fb0ff'>
-                                                    Jing Gao, Qi Li, <span style='color:#5574ff'>Bo Zhao</span>, Wei Fan, <span style='color: #ff6367'>Jiawei Han</span>
+                                                    <!--Jing Gao, Qi Li, <span style='color:#5574ff'>Bo Zhao</span>, Wei Fan, <span style='color: #ff6367'>Jiawei Han</span>-->
+						    {% for author in item.info_json.authors %}
+							{{ author.name }} ;
+						    {% endfor %}
                                                 </p>
                                             </td>
                                             <td width='10%'>
-                                                <p style='color: #888991'>KDD(2016)</p>
+                                                <p style='color: #888991'>
+						    {{ item.info_json.venue.name }}({{ item.info_json.year }})
+						</p>
                                             </td>
                                         </tr>
+					{% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -134,7 +141,7 @@
                         </div>
                     </div>
                 </div>
-		-->
+		
             </div>
         </div>
         <script>

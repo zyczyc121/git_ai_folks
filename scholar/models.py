@@ -45,4 +45,6 @@ class Label(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
 
-
+class Paper(models.Model):
+    scholar = models.ForeignKey(Scholar, on_delete=models.CASCADE)
+    info_json = JSONField(null = True, default = None)
