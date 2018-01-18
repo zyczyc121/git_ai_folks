@@ -55,7 +55,7 @@
                                                             <a href="{% url 'scholar:profile' person.id %}">{{ person.name }}</a>
                                                         </h4>
                                                         <ul class="introduction">
-                                                            <li>{{ person.affiliation }}</li>
+                                                            <li>{{ person.affiliation }}{% for item in person.collection_set.filter %}{% if item.user == user %}{{ item.name }}{% endif %}{% endfor %}</li>
                                                         </ul>
                                                     </div>
                                                 </li>

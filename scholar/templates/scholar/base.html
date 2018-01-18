@@ -28,7 +28,6 @@
     <script src="https://cdn.bootcss.com/nvd3/1.1.15-beta/nv.d3.js"></script>
 
 </head>
-
 <body class='index'>
     <div class='head'>
         <div class='login'>
@@ -83,7 +82,7 @@
                     <!-- .panel-collapse和.collapse标明折叠元素 .in表示要显示出来 -->
                     <div id="collapseListGroup1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading1">
                         <ul class="list-group">
-                            <li class="list-group-item">
+                             <li class="list-group-item">
                                 <!-- 利用data-target指定URL -->
                                 <a href="{% url 'scholar:field_rank' 'artificial intellgience' %}" class="menu-item-left">
                                     人工智能
@@ -124,7 +123,7 @@
                                     网络搜索
                                 </a>
                             </li>
-			    <li class="list-group-item">
+			                  <li class="list-group-item">
                                 <a href="{% url 'scholar:field_rank' 'system' %}" class="menu-item-left">
                                     计算机系统
                                 </a>
@@ -134,29 +133,60 @@
                                     数据库
                                 </a>
                             </li>
-			    <li class="list-group-item">
+			                 <li class="list-group-item">
                                 <a href="{% url 'scholar:field_rank' 'security' %}" class="menu-item-left">
                                     计算机安全
                                 </a>
                             </li>
-			    <li class="list-group-item">
+			                  <li class="list-group-item">
                                 <a href="{% url 'scholar:field_rank' 'human-computern interaction' %}" class="menu-item-left">
                                     人机交互
                                 </a>
                             </li>
-			    <li class="list-group-item">
+			                  <li class="list-group-item">
                                 <a href="{% url 'scholar:field_rank' 'software engineering' %}" class="menu-item-left">
                                     软件工程
                                 </a>
                             </li>
-			    <li class="list-group-item">
+			                 <li class="list-group-item">
                                 <a href="{% url 'scholar:field_rank' 'theory' %}" class="menu-item-left">
                                     计算机理论
                                 </a>
                             </li>
                         </ul>
                     </div>
+
                 </div><!--panel end-->
+                <div class="panel panel-primary leftMenu">
+                    <!-- 利用data-target指定要折叠的分组列表 -->
+                    <div class="panel-heading collapsed" id="collapseListGroupHeading2" data-toggle="collapse" data-parent="#accordion"  data-target="#collapseListGroup2" role="tab" >
+                        <h4 class="panel-title">
+                            <i class="fa fa-star"></i>
+                            我的人才库
+                            <span class="fa fa-caret-down right"></span>
+                            <span class="fa fa-plus add" style="color:#515565;float: right;line-height: 20px" id="add_collection" data-toggle="modal" data-target="#addcoll"></span>
+                        </h4>
+                       
+                    </div>
+                    <div id="collapseListGroup2" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+		      {% for item in user.collection_set.filter %}
+                        <ul class="list-group" style="color: white" id="addcolls">
+                            <li class="list-group-item">
+                                <span style="width: 80px;display: block;float: left;text-align: center;overflow: hidden;text-overflow: ellipsis;"> {{ item.name }}</span>
+                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-ellipsis-h" style="margin-left: 50px;color: white"></span> </a>
+                                     <ul class="dropdown-menu" style="margin-left:50px">
+                                        <li><a data-toggle="modal" data-target="#editcoll">
+                                                编辑标签
+                                            </a></li>
+                                        <li><a data-toggle="modal" data-target="#removecoll">
+                                                删除标签
+                                            </a></li>
+                                    </ul>
+                            </li>
+                        </ul>
+			{% endfor %}
+                    </div>
+                </div>
 		<!--
                 <div class="panel panel-primary leftMenu">
                     <div class="panel-heading collapsed" id="collapseListGroupHeading2" data-toggle="collapse" data-parent="#accordion"  data-target="#collapseListGroup2" role="tab" >
@@ -400,10 +430,193 @@
             </div>
         </div>
     </div>
+    <div class="alert alert-success alert-dismissable" tabindex="-1" show=true role="dialog" id="alert">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                        成功！很好地完成了提交。
+        </div>
+    <div class="modal fade" id="addcoll" tabindex="-1" show=true role="dialog" aria-labelledby="addcollection">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style='border: none;'>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="loginLabel" style='text-align: center;color: #5d83ff;'>
+                            新建标签
+                    </h4>
+                </div>
+                <div class="modal-body">
+                   <label style="float: left;margin-left: 20px">标签名称</label>
+                   <textarea name="" id="addcoll_txt" cols="30" rows="10" style="resize: none;width: 70%;margin-left: 5%;border:3px solid #eee;border-radius: 3px;padding:10px;box-sizing: border-box;"
+                   placeholder="最多10个中文字符或20个英文字符，请不要输入 “ | ;& # 等特殊字符，同时新建多个标签请在每个标签后换行，最多支持新建9个标签。"></textarea>
+                   <br>
+                   <br>
+                    <button class="btn btn-primary" type="button" style="margin-left:250px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="cancel_add">取消</button>
+                    <button class="btn btn-primary" type="button" style="margin-left:20px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="determine_add" >确定</button>
+                   <div style="clear: both;"></div>
+
+                </div>
+            </div>
+         </div>
+    </div>
+     <div class="modal fade" id="editcoll" tabindex="-1" show=true role="dialog" aria-labelledby="addcollection">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style='border: none;'>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="loginLabel" style='text-align: center;color: #5d83ff;'>
+                            编辑标签
+                    </h4>
+                </div>
+                <div class="modal-body">
+                  <label style="margin-left: 10px">编辑标签</label>
+                  <input type="text" id="edit_text" style="width: 75%;height: 50px;border-radius: 3px;border:2px solid #eee;margin-left: 30px;padding: 10px;box-sizing: border-box;">
+                  <br>
+                  <br>
+                     <button class="btn btn-primary" type="button" style="margin-left:250px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="cancel_edit">取消</button>
+                    <button class="btn btn-primary" type="button" style="margin-left:20px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="determine_edit" >确定</button>
+                </div>
+            </div>
+         </div>
+    </div>
+    <div class="modal fade" id="removecoll" tabindex="-1" show=true role="dialog" aria-labelledby="addcollection">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style='border: none;'>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="loginLabel" style='text-align: center;color: #5d83ff;'>
+                            删除标签
+                    </h4>
+                </div>
+                <div class="modal-body">
+                  <label style="margin-left: 10px;float: left;">删除提示</label>
+                  <textarea name="" id="" cols="50" rows="5" style="border-radius: 3px;border:2px solid #eee;margin-left: 30px;padding: 10px;box-sizing: border-box;resize: none" readonly="true">对该标签的删除会将该标签的子集和相关标注内容一并删除，请谨慎操作。</textarea>
+                  <br>
+                  <br>
+                     <button class="btn btn-primary" type="button" style="margin-left:250px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="cancel_remove">取消</button>
+                    <button class="btn btn-primary" type="button" style="margin-left:20px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="determine_remove" >确定</button>
+                </div>
+            </div>
+         </div>
+    </div>
+    <div class="modal fade" id="folkscoll" tabindex="-1" show=true role="dialog" aria-labelledby="addcollection">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style='border: none;'>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="loginLabel" style='text-align: center;color: #5d83ff;'>
+                            标签标注-Bart Selman
+                    </h4>
+                </div>
+                <div class="modal-body">
+                  <label style="margin-left: 10px;float: left;">标签选择</label>
+                  <div style="width: 80%;height: 170px;border:1px solid #ccc;float: left;margin-left: 20px;border-radius: 3px">
+                        <div class="dropdown">
+                            <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">主题
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">Java</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">数据挖掘</a>
+                                </li>   
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">数据通信/网络</a>
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#">分离的链接</a>
+                                </li>
+                            </ul>
+                        </div>
+                  </div>
+                  <br>
+                  <br>
+                     <button class="btn btn-primary" type="button" style="margin-left:250px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="cancel_remove">取消</button>
+                    <button class="btn btn-primary" type="button" style="margin-left:20px;padding:3px 30px;font-size: 13px;background: transparent;border:1px solid #337ab7;color: #337ab7" id="determine_remove" >确定</button>
+                </div>
+            </div>
+         </div>
+    </div>
+
    
     <script>
 
     $(function(){
+        let timer=null,addcoll_list=''
+        $("#alert").hide()
+        $("#addcolls>li>a").unbind('click').bind("click",function(){
+            operate($(this).parent().index(),$(this).prev().text())
+         })
+      
+            //对标签进行操作 operate
+        function operate(i,text){
+                //取消删除标签
+            $("#cancel_remove").click(function(){
+                $("#removecoll").modal("hide")
+            })
+                //确定删除标签
+             $("#determine_remove").unbind("click").click(function(){
+                $("#removecoll").modal("hide")
+                $("#alert").text('删除成功')
+                $("#alert").show(500)
+                $('#addcolls>li').eq(i).hide(200)
+                timer=setTimeout(()=>{
+                     $("#alert").hide(500)
+                },1500)
+            })
+
+             $("#edit_text").val(text)
+                  //取消编辑标签
+            $("#cancel_edit").click(function(){
+                $("#editcoll").modal("hide")
+            })
+                //确定编辑标签    
+             $("#determine_edit").unbind('click').click(function(){
+                $("#editcoll").modal("hide")
+                $("#alert").text('编辑成功')
+                $("#alert").show(500)
+                $('#addcolls>li').eq(i).find('span').eq(0).text( $("#edit_text").val())
+                timer=setTimeout(()=>{
+                     $("#alert").hide(500)
+                },1500)
+            })
+        }
+
+            //取消添加标签
+        $("#cancel_add").click(function(){
+            $("#addcoll").modal("hide")
+        })
+            //确定添加标签
+         $("#determine_add").click(function(){
+            $("#addcoll").modal("hide")
+            addcoll_list=`<li class="list-group-item">
+                               <span  style="width: 80px;display: block;float: left;text-align: center;overflow: hidden;text-overflow: ellipsis;"> ${$("#addcoll_txt").val()}</span>
+                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-ellipsis-h" style="margin-left: 50px;color: white"></span>    </a>
+                                     <ul class="dropdown-menu" style="margin-left:50px">
+                                        <li><a data-toggle="modal" data-target="#editcoll">
+                                                编辑标签
+                                            </a></li>
+                                        <li><a data-toggle="modal" data-target="#removecoll">
+                                                删除标签
+                                            </a></li>
+                                    </ul>
+                            </li>`
+            $("#addcolls").append(addcoll_list)
+            $("#alert").text('添加成功')
+            $("#addcoll_txt").val("")
+            $("#addcolls>li>a").unbind('click').bind("click",function(){
+                operate($(this).parent().index(),$(this).prev().text())
+             })
+            $("#alert").show(500)
+            timer=setTimeout(()=>{
+                 $("#alert").hide(500)
+            },1500)
+        })
+
         $(".panel-heading").click(function(e){
             /*切换折叠指示图标*/
             $(this).find("span.right").toggleClass("fa-caret-down");
@@ -445,7 +658,6 @@
                     $('#name_err').text(result.username[0].message);
                     $('#password1_err').text(result.password1[0].message);
                     $('#password2_err').text(result.password2[0].message);
-		    
                 }
             });
             

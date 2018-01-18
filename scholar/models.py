@@ -33,6 +33,7 @@ class Scholar(models.Model):
     rank = models.IntegerField(null = True)
     focus = JSONField(null = True, default=None)
     statistics = JSONField(null = True, default=None)
+    
 class Tag(models.Model):
     title = models.CharField(max_length = 60)
     members = models.ManyToManyField(Scholar, through = 'Label')
@@ -48,3 +49,10 @@ class Label(models.Model):
 class Paper(models.Model):
     scholar = models.ForeignKey(Scholar, on_delete=models.CASCADE)
     info_json = JSONField(null = True, default = None)
+
+
+class Collection(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
+    name = models.CharField(max_length = 20, null = True, default = '我的人才库')
+    scholar = models.ManyToManyField(Scholar)
+    

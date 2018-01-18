@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from scholar.models import Scholar
+from scholar.models import Scholar, Collection
 
 def index(request):
     return HttpResponse("Scholar Index Here")
@@ -30,10 +30,20 @@ def tag_search(request, tag_name, order_by = 'rank', order = 'asc'):
 
     return render(request, 'scholar/list.html', context)
 
+def my_collection(request, col_id, order_by = 'rank', order = 'asc'):
+    context = {order_by: True, order: True}
+    if order == 'desc':
+        order_by = '-' + order_by
+    context['scholars'] = Scholar.objects.filter(collection = col_id).order_by(order_by)
+    context['listing'] = '我的人才库: ' + Collection.objects.get(pk = col_id).name
+    context['data_set'] = 'my_collection/' + col_id
+    
+    return render(request, 'scholar/list.html', context)
+
 def profile(request, scholar_pk):
     scholar = get_object_or_404(Scholar, id = scholar_pk)
     return render(request, "scholar/index.html", {
-        'scholar': scholar,    
+        'scholar': scholar,
     })
 
 def search(request, name = None, order_by = 'rank', order = 'asc'):
@@ -63,6 +73,8 @@ def sort(request, var):
         return tag_search(request, content, str(request.GET.get('orderKey')), str(request.GET.get('order')))
     elif function == 'search':
         return search(request, content, str(request.GET.get('orderKey')), str(request.GET.get('order')))
+    elif function == 'my_collection':
+        return my_collection(request, content, str(request.GET.get('orderKey')), str(request.GET.get('order')))
 
 def scholar_focus_json(request, scholar_pk):
     data = Scholar.objects.get(id = scholar_pk).focus
@@ -71,3 +83,31 @@ def scholar_focus_json(request, scholar_pk):
 def scholar_statistics_json(request, scholar_pk):
     data = Scholar.objects.get(id = scholar_pk).statistics
     return JsonResponse(data)
+
+def collection_create(request, name):
+    c = Collection(name = name, user = request.user)
+    c.save()
+    return JsonResponse({'msg': 'success'})
+
+
+def collection_rename(request, col_id, name):
+    c = Collection.objects.get(id = col_id)
+    c.name = name
+    c.save()
+    return JsonResponse({'msg': 'success'})
+
+
+def collection_delete(request, col_id):
+    c = Collection.objects.filter(id = col_id).delete()
+    return JsonResponse({'msg': 'success'})
+
+def collection_add_scholar(request, col_id, scholar_pk):
+    s = Scholar.objects.get(id = scholar_pk)
+    Collection.objects.get(id = col_id).scholar.add(s)
+    return JsonResponse({'msg': 'success'})
+
+def collection_remove_scholar(request, col_id, scholar_pk):
+    s = Scholar.objects.get(id = scholar_pk)
+    Collection.objects.get(id = col_id).scholar.remove(s)
+    return JsonResponse({'msg': 'success'})
+

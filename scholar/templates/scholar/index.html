@@ -16,7 +16,8 @@
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading">
-                                            <a href="#">{{ scholar.name }}</a>
+                                          <a href="#">{{ scholar.name }} {% for item in scholar.collection_set.filter %}{% if item.user == user %}{{ item.name }}{% endif %}{% endfor %} </a>
+					  <!--<a href="#">{{ scholar.name }} {% for item in collect %}{{ item.name }}{% endfor %} </a> -->
                                         </h4>
                                         <ul class="introduction user-info">
                                             <li style='background-image: url("{% static "img/name.jpg" %}")'>{{ scholar.position }}</li>
