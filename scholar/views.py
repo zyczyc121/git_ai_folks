@@ -111,3 +111,15 @@ def collection_remove_scholar(request, col_id, scholar_pk):
     Collection.objects.get(id = col_id).scholar.remove(s)
     return JsonResponse({'msg': 'success'})
 
+def collection_add_batch(request, col_id):
+    if request.method == 'POST':
+        l = request.POST.get('lst')
+        l = l.split(',')
+        for item in l:
+            s = Scholar.objects.get(id = int(item))
+            Collection.objects.get(id = col_id).scholar.add(s)
+            
+        return JsonResponse({'msg': 'success', 'lst': str(l), 'col_id': col_id})
+    else:
+        return JsonResponse({'lst': 'GET'})
+    

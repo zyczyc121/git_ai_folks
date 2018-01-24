@@ -16,7 +16,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading">
-                                          <a href="#">{{ scholar.name }} {% for item in scholar.collection_set.filter %}{% if item.user == user %}{{ item.name }}{% endif %}{% endfor %} </a>
+                                          <a href="#">{{ scholar.name }}</a>
 					  <!--<a href="#">{{ scholar.name }} {% for item in collect %}{{ item.name }}{% endfor %} </a> -->
                                         </h4>
                                         <ul class="introduction user-info">
@@ -28,6 +28,29 @@
                                             <li style='background-image: url("{% static "img/education.jpg" %}")'>
                                              {{ scholar.graduateschool }}
                                             </li>
+                                        </ul>
+					{% if user.is_authenticated %}
+                                        <div class="personcoll_btn" style="float: left;margin-top: 3px">
+                                             <a data-toggle="modal" data-target="#personfolkscoll" name={{scholar.id}}>
+                                                 <span class="fa fa-star-o" style="font-size: 20px;color: #FF944D;"></span>
+                                             </a>
+                                        </div>
+					{% endif %}
+                                        <ul class="person_label" style="float: left;margin-left: 10px; width: 640px;overflow: 
+                                                    auto" id="person_label_list" >
+                                            {% for item in user.collection_set.filter %}
+                                                {% if scholar in item.scholar.all %}
+                                           <li style="float: left;margin-right: 30px;margin-top: 5px">
+                                                <div style="height: 20px;;position: relative;;text-align: center;line-height: 20px">
+                                                    <span style="color: white;display: block;;padding:0 15px;height: 20px;position: relative;z-index: 3;background: #FF944D;overflow: hidden;text-overflow: ellipsis;">{{ item.name}}</span>
+                                                    <i class="fa fa-close" style="display: block;margin: 0 auto;background: #FF6600;padding:3px 5px ;color:white ;position: absolute;left: 30px;z-index: 1;top: 0" pname={{scholar.id}} iname={{item.id}}
+                                                    ></i>
+                                                       <div style="clear: both;"></div>
+                                                </div>
+                                                <div style="clear: both;"></div>
+                                            </li>
+                                                {% endif %}
+                                            {% endfor %}
                                         </ul>
                                     </div>
                                 </li>

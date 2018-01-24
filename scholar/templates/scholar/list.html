@@ -4,7 +4,20 @@
         <div class='col-xs-12 card'>
             <div class='myTab'>
                 <div class='rgzn'>
-                <span>{{ listing }}</span>
+                <span style="display: block;float: left;">{{ listing }}</span>
+                <div style="float: left;margin-top: 10px;margin-left: 20px">
+                 <button class="btn btn-primary" style="padding:3px 5px;font-size: 12px;float: left;" type="button" id="tagging_btn">批量收藏</button>
+                    <div style="float: left ;color: #aaa;font-size: 12px;padding: 3px 5px;margin-top: 1px">
+                       
+                        <label id="mulitSelect" style="display: none">
+                       <span style="display: block;float: left;margin-top: 2px;margin-right: 5px">全选</span> <input type="checkbox">
+                        </label>
+                    </div>
+                     <a data-toggle="modal" data-target="#mulitSelect_list" style="display: block;
+                     float: left;">
+                          <button class="btn btn-primary" style="padding:3px 5px;font-size: 12px;float: left;display: none;" type="button" id="tagging_in_btn">收藏</button>
+                     </a>
+                </div>
 
                         <div class='form' >
                                 <form class="form-inline" action="{% url 'scholar:sort' data_set %}">
@@ -34,15 +47,16 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th width='30%'>人才</th>
-                                        <th width='30%'>领域</th>
-                                        <th width='40%'>标签</th>
+                                        <th width='45%'>人才</th>
+                                        <th width='25%'>领域</th>
+                                        <th width='30%'>标签</th>
                                     </tr>
                                 </thead>
                                 {% for person in scholars %}
                                 <tbody>
                                     <tr>
                                         <td>
+                                            <input type="checkbox" style="display: none" class="checkbox_list" name={{person.id}}>
                                             <ul class="media-list">
                                                 <li class="media">
                                                     <div class="media-left">
@@ -55,9 +69,33 @@
                                                             <a href="{% url 'scholar:profile' person.id %}">{{ person.name }}</a>
                                                         </h4>
                                                         <ul class="introduction">
-                                                            <li>{{ person.affiliation }}{% for item in person.collection_set.filter %}{% if item.user == user %}{{ item.name }}{% endif %}{% endfor %}</li>
+                                                            <li>{{ person.affiliation }}</li>
                                                         </ul>
+                                                        
                                                     </div>
+						    {% if user.is_authenticated %}
+                                                   <div class="coll_btn" style="float: left;margin-left: 103px;margin-top: 3px">
+                                                         <a data-toggle="modal" data-target="#folkscoll" name={{person.id}}>
+                                                             <span class="fa fa-star-o" style="font-size: 20px;color: #FF944D;"></span>
+                                                         </a>
+                                                    </div>
+                                                    {% endif%}
+                                                 <ul class="person_label" style="float: left;margin-left: 10px; width: 69%;overflow: 
+                                                    auto" id="person_label_list" >
+                                                        {% for item in user.collection_set.filter %}
+                                                            {% if person in item.scholar.all %}
+                                                       <li style="float: left;margin-right: 25px;margin-top: 5px">
+                                                            <div style="height: 20px;;position: relative;;text-align: center;">
+                                                                <span style="color: white;display: block;;padding:0 15px;height: 20px;position: relative;z-index: 3;background: #FF944D;overflow: hidden;text-overflow: ellipsis;">{{ item.name}}</span>
+                                                                <i class="fa fa-close" style="display: block;margin: 0 auto;background: #FF6600;padding:3px 5px ;color:white ;position: absolute;left: 30px;z-index: 1;top: 0" pname={{person.id}} iname={{item.id}}
+                                                                ></i>
+                                                            </div>
+                                                            <div style="clear: both;"></div>
+                                                        </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+
                                                 </li>
                                             </ul>
                                         </td>
@@ -69,11 +107,11 @@
                                             </div>
                                         </td>
                                         <td>
-					    {% for item in person.tag_set.all %}					       
-					        {% if item.user_id == request.user.id or item.user == None %}
+                        {% for item in person.tag_set.all %}                           
+                            {% if item.user_id == request.user.id or item.user == None %}
                                                     <span class='tag' style='margin-bottom: 10px'><a href="{% url 'scholar:tag_search' item %}">{{ item }}</a></span>
-						{% endif %}
-					    {% endfor%}
+                        {% endif %}
+                        {% endfor%}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -82,6 +120,6 @@
                         </div>
                </div>
            </div>
-	</div>
+    </div>
      </div> 
 {% endblock %}

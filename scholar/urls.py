@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^collection_delete/(?P<col_id>.+)$', scholar.views.collection_delete, name='collection_delete'),
     url(r'^collection_add_scholar/(?P<col_id>.+)/(?P<scholar_pk>.+)$', scholar.views.collection_add_scholar, name='collection_add_schoalr'),
     url(r'^collection_remove_scholar/(?P<col_id>.+)/(?P<scholar_pk>.+)$', scholar.views.collection_remove_scholar, name='collection_remove_scholar'),
+    url(r'^collection_add_batch/(?P<col_id>.+)$', scholar.views.collection_add_batch, name='collection_add_batch'),
 ]
